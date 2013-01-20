@@ -68,9 +68,9 @@
 
 (defun heap-extract-max (h)
   "Extracts max from heap."
-  (let ((mx (vector-pop-front h)))
-    (build-max-heap h)
-    mx))
+    (let ((mx (vector-pop-front h)))
+      (build-max-heap h)
+      mx))
 
 (defun heap-increase-key (h i)
   "Inserts value i into heap h."
