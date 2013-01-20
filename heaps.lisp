@@ -30,7 +30,7 @@
   "Creates new max heap object."
   `(setf (symbol-function ,n) 
      (let* ((heap (new-max-heap ,size ,contents))
-           (hsize (length heap)))
+            (hsize (length heap)))
        (dlambda
          (:insert (v) 
           (incf hsize)
@@ -43,6 +43,27 @@
          (:extract-max () 
           (if (> hsize 0) 
             (let ((r (heap-extract-max heap)))
+              (decf hsize)
+              r)
+            nil))))))
+
+(defmacro min-heap (n &key size contents)
+  "Creates new min heap object."
+  `(setf (symbol-function ,n) 
+     (let* ((heap (new-min-heap ,size ,contents))
+            (hsize (length heap)))
+       (dlambda
+         (:insert (v) 
+          (incf hsize)
+          (min-heap-insert heap v))
+         (:get-min () 
+          (if (> hsize 0) 
+            (heap-min heap) nil))
+         (:get-size () 
+          hsize)
+         (:extract-min () 
+          (if (> hsize 0) 
+            (let ((r (heap-extract-min heap)))
               (decf hsize)
               r)
             nil))))))

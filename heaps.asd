@@ -34,5 +34,6 @@
                (:file "lol")
                (:file "utils")
                (:file "max-heaps")
+               (:file "min-heaps")
                (:file "heaps")))
 

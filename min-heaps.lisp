@@ -26,15 +26,15 @@
 ;; either expressed or implied, of the FreeBSD Project.
 (in-package #:heaps)
 
-(defmacro new-max-heap (size contents)
+(defmacro new-min-heap (size contents)
   "Creates new max-heap object with correct params."
   (if size
-     `(make-max-heap :size ,size)
+     `(make-min-heap :size ,size)
      (if contents
-       `(make-max-heap :contents ,contents)
-       `(make-max-heap))))
+       `(make-min-heap :contents ,contents)
+       `(make-min-heap))))
 
-(defun make-max-heap (&key size contents)
+(defun make-min-heap (&key size contents)
   "Builds max-heap of size or with contents."
   (let ((heap
           (progn
@@ -43,46 +43,46 @@
               (if contents 
                 (make-array (length contents) :fill-pointer t :adjustable t :initial-contents contents)
                 (make-array 0 :fill-pointer t :adjustable t))))))
-    (build-max-heap heap)
+    (build-min-heap heap)
     heap))
 
-(defun max-heapify (h i &aux (len (length h)) (largest i))
+(defun min-heapify (h i &aux (len (length h)) (largest i))
   "Heapifies a heap with root node i."
   (let ((l (left i)) (r (right i)))
-    (when (and (< l len) (> (aref h l) (aref h i)))
+    (when (and (< l len) (< (aref h l) (aref h i)))
       (setf largest l))
-    (when (and (< r len) (> (aref h r) (aref h largest)))
+    (when (and (< r len) (< (aref h r) (aref h largest)))
       (setf largest r))
     (unless (= largest i)
       (progn
         (rotatef (aref h i) (aref h largest))
-        (max-heapify h largest)))))
+        (min-heapify h largest)))))
 
-(defun build-max-heap (h &aux (len (length h)))
+(defun build-min-heap (h &aux (len (length h)))
   "Builds max heap from vector h."
   (loop for i from (floor (/ (- len 1) 2)) downto 0
-        do (max-heapify h i)))
+        do (min-heapify h i)))
 
-(defun heap-max (h)
+(defun heap-min (h)
   "Gets max from heap h."
   (aref h 0))
 
-(defun heap-extract-max (h)
+(defun heap-extract-min (h)
   "Extracts max from heap."
-    (let ((mx (aref h 0)))
+    (let ((mn (aref h 0)))
       (setf (aref h 0) (vector-pop h))
       (max-heapify h 0)
-      mx))
+      mn))
 
-(defun heap-increase-key (h i)
+(defun heap-decrease-key (h i)
   "Inserts value i into heap h."
-  (loop while (and (> i 0) (< (aref h (parent i)) (aref h i))) do 
+  (loop while (and (> i 0) (> (aref h (parent i)) (aref h i))) do 
         (progn
           (rotatef (aref h i) (aref h (parent i)))
           (setf i (parent i)))))
 
-(defun max-heap-insert (h key)
+(defun min-heap-insert (h key)
   "Adds key to heap h."
   (vector-push-extend key h)
-  (heap-increase-key h (- (length h) 1))
+  (heap-decrease-key h (- (length h) 1))
   key)

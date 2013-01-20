@@ -27,5 +27,6 @@
 
 (defpackage #:heaps
   (:use #:cl)
-  (:export #:max-heap))
+  (:export #:max-heap
+           #:min-heap))
 
