@@ -1,6 +1,6 @@
 #HEAPS  
 
-Common lisp implementation of max-heaps.  Uses a dlambda (see let over lambda) interface for heap objects.
+Common lisp implementation of min/max heaps.  Uses a dlambda (see let over lambda) interface for heap objects.
 
 Loading and using a max-heap:  
 
